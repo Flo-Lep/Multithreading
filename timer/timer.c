@@ -37,7 +37,7 @@ extern void TIMER_init(Timer* p, int time_in_seconds){
 	p->event.sigev_notify_function = TIMER_time_elapsed;
 	p->event.sigev_notify_attributes = NULL;
 	//Create timer
-	if (timer_create(CLOCK_REALTIME, p->event, p->timer) != 0) {ON_ERROR("TIMER_start");}
+	if (timer_create(CLOCK_REALTIME, &(p->event), &(p->timer)) != 0) {ON_ERROR("TIMER_start");}
 	p->itimer.it_interval.tv_sec = 0;
 	p->itimer.it_interval.tv_nsec = 0;
 	p->itimer.it_value.tv_sec = time_in_seconds;
@@ -47,9 +47,17 @@ extern void TIMER_init(Timer* p, int time_in_seconds){
 extern void TIMER_start(Timer* p){
 	time(&current_time);
 	fprintf(stdout, "lancement timer à : %s\n", ctime(&current_time));
-	if (timer_settime(p->timer, 0, &itimer, NULL) != 0) {
+	if (timer_settime(&(p->timer), 0, &(p->itimer), NULL) != 0) {
 		ON_ERROR("TIMER_start");
 	}
+}
+
+extern void TIMER_STOP(Timer *p){
+	p->itimer.it_interval.tv_sec = 0;
+	p->itimer.it_interval.tv_nsec = 0;
+	p->itimer.it_value.tv_sec = 0;
+	p->itimer.it_value.tv_nsec = 0;
+	TIMER_start(p);
 }
 
 /*----------PRIVATE FUNCTIONS----------*/

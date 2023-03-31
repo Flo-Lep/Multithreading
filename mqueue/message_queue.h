@@ -1,5 +1,5 @@
-#ifndef _MESSAGE_QUEUE_
-#define _MESSAGE_QUEUE_
+#ifndef _MESSAGE_QUEUE_H_
+#define _MESSAGE_QUEUE_H_
 
 typedef struct MessageQueueAttributes MessageQueue;
 
@@ -15,4 +15,4 @@ extern void MESSAGE_QUEUE_add_message(MessageQueue* p, char buffer);
 extern void MESSAGE_QUEUE_process_message(MessageQueue* p);
 extern void MESSAGE_QUEUE_close(MessageQueue* p);
 
-#endif /*_MESSAGE_QUEUE_*/
+#endif /*_MESSAGE_QUEUE_H_*/

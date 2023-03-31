@@ -1,5 +1,5 @@
-#ifndef _TIMER_
-#define _TIMER_
+#ifndef _TIMER_H_
+#define _TIMER_H_
 
 typedef struct TimerAttributes Timer;
 
@@ -10,7 +10,8 @@ extern Timer* TIMER_create(void);
 extern void TIMER_destroy(Timer* p);
 
 /*METHODS*/
-extern void TIMER_init(Timer* p);
+extern void TIMER_init(Timer* p, int time_in_seconds);
 extern void TIMER_start(Timer* p);
+extern void TIMER_STOP(Timer *p);
 
-#endif /*_TIMER_*/
+#endif /*_TIMER_H_*/
