@@ -12,7 +12,7 @@ static time_t current_time;
 
 /*----------OBJECT ATTRIBUTES----------*/
 struct TimerAttributes{
-	timer_t timer;
+	timer_t instance;
 	struct sigevent event;
 	struct itimerspec itimer;
 };
@@ -31,13 +31,13 @@ extern void TIMER_destroy(Timer* p){
 
 /*----------OBJECT PUBLIC METHODS----------*/
 extern void TIMER_init(Timer* p, int time_in_seconds){
-	char * value = "value";
+	char * value = "timer_msg";
 	p->event.sigev_notify = SIGEV_THREAD;
 	p->event.sigev_value.sival_ptr = (void *)value;
 	p->event.sigev_notify_function = TIMER_time_elapsed;
 	p->event.sigev_notify_attributes = NULL;
 	//Create timer
-	if (timer_create(CLOCK_REALTIME, &(p->event), &(p->timer)) != 0) {ON_ERROR("TIMER_start");}
+	if (timer_create(CLOCK_REALTIME, &(p->event), &(p->instance)) != 0) {ON_ERROR("TIMER_start");}
 	p->itimer.it_interval.tv_sec = 0;
 	p->itimer.it_interval.tv_nsec = 0;
 	p->itimer.it_value.tv_sec = time_in_seconds;
@@ -46,8 +46,8 @@ extern void TIMER_init(Timer* p, int time_in_seconds){
 
 extern void TIMER_start(Timer* p){
 	time(&current_time);
-	fprintf(stdout, "lancement timer à : %s\n", ctime(&current_time));
-	if (timer_settime(&(p->timer), 0, &(p->itimer), NULL) != 0) {
+	fprintf(stdout, "TIMER started on : %s\n", ctime(&current_time));
+	if (timer_settime(p->instance, 0, &(p->itimer), NULL) != 0) {
 		ON_ERROR("TIMER_start");
 	}
 }
@@ -65,7 +65,7 @@ extern void TIMER_STOP(Timer *p){
 static void TIMER_time_elapsed(union sigval val){
 	char * message = (char *)(val.sival_ptr);
 	time(&current_time);
-	fprintf(stdout, "message reçu : %s, à %s\n", message, ctime(&current_time));
+	fprintf(stdout, "TIMER time elapsed on : %s --> value : %s\n\n", ctime(&current_time), message);
 }
 
 static void ON_ERROR(char error[]){
