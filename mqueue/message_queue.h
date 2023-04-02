@@ -1,3 +1,9 @@
+/*
+ * message_queue.h
+ * Created on: April 2, 2023
+ * Author: Florentin LEPELTIER
+ */
+
 #ifndef _MESSAGE_QUEUE_H_
 #define _MESSAGE_QUEUE_H_
 

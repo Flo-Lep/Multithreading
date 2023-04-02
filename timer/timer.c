@@ -1,3 +1,9 @@
+/*
+ * timer.c
+ * Created on: April 2, 2023
+ * Author: Florentin LEPELTIER
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,19 +24,19 @@ struct TimerAttributes{
 };
 
 /*----------OBJECT CONSTRUCTOR----------*/
-extern Timer* TIMER_create(void){
+Timer* TIMER_create(void){
 	Timer* pointer = (Timer*)malloc(sizeof(Timer));
 	if(pointer==NULL){ON_ERROR("TIMER_create");}
 	return pointer;
 }
 
 /*----------OBJECT DESTRUCTOR----------*/
-extern void TIMER_destroy(Timer* p){
+void TIMER_destroy(Timer* p){
 	free(p);
 }
 
 /*----------OBJECT PUBLIC METHODS----------*/
-extern void TIMER_init(Timer* p, int time_in_seconds){
+void TIMER_init(Timer* p, int time_in_seconds){
 	char * value = "timer_msg";
 	p->event.sigev_notify = SIGEV_THREAD;
 	p->event.sigev_value.sival_ptr = (void *)value;
@@ -44,7 +50,7 @@ extern void TIMER_init(Timer* p, int time_in_seconds){
 	p->itimer.it_value.tv_nsec = 0;
 }
 
-extern void TIMER_start(Timer* p){
+void TIMER_start(Timer* p){
 	time(&current_time);
 	fprintf(stdout, "TIMER started on : %s\n", ctime(&current_time));
 	if (timer_settime(p->instance, 0, &(p->itimer), NULL) != 0) {
@@ -52,7 +58,7 @@ extern void TIMER_start(Timer* p){
 	}
 }
 
-extern void TIMER_STOP(Timer *p){
+void TIMER_STOP(Timer *p){
 	p->itimer.it_interval.tv_sec = 0;
 	p->itimer.it_interval.tv_nsec = 0;
 	p->itimer.it_value.tv_sec = 0;

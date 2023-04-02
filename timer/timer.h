@@ -1,3 +1,9 @@
+/*
+ * timer.c
+ * Created on: April 2, 2023
+ * Author: Florentin LEPELTIER
+ */
+
 #ifndef _TIMER_H_
 #define _TIMER_H_
 

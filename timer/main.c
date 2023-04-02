@@ -1,3 +1,9 @@
+/*
+ * main.c
+ * Created on: April 2, 2023
+ * Author: Florentin LEPELTIER
+ */
+
 #include <stdio.h>
 #include <unistd.h>
 #include "timer.h"

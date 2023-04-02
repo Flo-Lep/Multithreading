@@ -1,3 +1,9 @@
+/*
+ * message_queue.c
+ * Created on: April 2, 2023
+ * Author: Florentin LEPELTIER
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <mqueue.h>
@@ -18,7 +24,7 @@ struct MessageQueueAttributes{
 };
 
 /*----------OBJECT CONSTRUCTOR----------*/
-extern MessageQueue* MESSAGE_QUEUE_create(char name[]){
+MessageQueue* MESSAGE_QUEUE_create(char name[]){
 	MessageQueue* pointer = (MessageQueue*)malloc(sizeof(MessageQueue));
 	if(pointer==NULL){ON_ERROR("MESSAGE_QUEUE_create");}
 	for(int i=0;i<sizeof(&name);i++){
@@ -28,13 +34,13 @@ extern MessageQueue* MESSAGE_QUEUE_create(char name[]){
 }
 
 /*----------OBJECT DESTRUCTOR----------*/
-extern void MESSAGE_QUEUE_destroy(MessageQueue* p){
+void MESSAGE_QUEUE_destroy(MessageQueue* p){
 	free(p);
 }
 
 /*----------OBJECT PUBLIC METHODS----------*/
 
-extern void MESSAGE_QUEUE_init(MessageQueue* p){
+void MESSAGE_QUEUE_init(MessageQueue* p){
 	p->MQ_MSG_MAX = MSG_MAX;
 	p->MQ_MSG_SIZE = MSG_SIZE;
 	p->attr.mq_maxmsg = MSG_MAX;
@@ -49,7 +55,7 @@ extern void MESSAGE_QUEUE_init(MessageQueue* p){
 	}
 }
 
-extern void MESSAGE_QUEUE_process_message(MessageQueue* p){
+void MESSAGE_QUEUE_process_message(MessageQueue* p){
 	char buffer[p->MQ_MSG_SIZE];
 	if (mq_receive(p->instance, buffer, p->MQ_MSG_SIZE, NULL) == -1) {
 		mq_close(p->instance);
@@ -59,14 +65,14 @@ extern void MESSAGE_QUEUE_process_message(MessageQueue* p){
 	fprintf(stdout, "> %s", buffer);
 }
 
-extern void MESSAGE_QUEUE_add_message(MessageQueue* p, char buffer[]){
+void MESSAGE_QUEUE_add_message(MessageQueue* p, char buffer[]){
 	if(mq_send(p->instance, buffer, p->MQ_MSG_SIZE, 0) == -1){
 		mq_close(p->instance);
 		ON_ERROR("MQ_add_message");
 	}
 }
 
-extern void MESSAGE_QUEUE_close(MessageQueue* p){
+void MESSAGE_QUEUE_close(MessageQueue* p){
 	mq_close(p->instance);
 	mq_unlink(p->name);
 	//check error ?
