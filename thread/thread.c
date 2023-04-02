@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h> //For O_CREATE, etc.
 
 #include <semaphore.h>
 
@@ -46,14 +47,15 @@ void THREAD_start(Thread* p){
 	if (pthread_create(&(p->thread), NULL, THREAD_demo_callback, NULL) != 0) {
 		ON_ERROR("THREAD_start");
 	}
+	fprintf(stdout, "New thread successfully started\n");
 }
 
 void THREAD_detach(Thread *p){
-	pthread_join(p->thread, NULL);
+	pthread_detach(p->thread);
 }
 
 void THREAD_join(Thread *p){
-	pthread_detach(p->thread);
+	pthread_join(p->thread, NULL);
 }
 
 void THREAD_exit(void){
@@ -61,15 +63,15 @@ void THREAD_exit(void){
 }
 
 void * THREAD_demo_callback(void * arg){
-	fprintf(stdout, "New thread started\n");
+	fprintf(stdout, "New thread function exec\n");
 	return NULL;
 }
 
 /*******************TOOLS*************************/
 
 void THREAD_init_mutex(Thread *p){
-	p->mutex = PTHREAD_MUTEX_INITIALIZER;
-	p->cond = PTHREAD_COND_INITIALIZER;
+	//p->mutex = PTHREAD_MUTEX_INITIALIZER;
+	//p->cond = PTHREAD_COND_INITIALIZER;
 }
 
 void THREAD_init_barrier(Thread *p, int nb_of_barriers){

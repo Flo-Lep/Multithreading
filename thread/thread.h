@@ -20,7 +20,7 @@ extern void THREAD_exit(void);
 extern void * THREAD_demo_callback(void * arg);
 
 extern void THREAD_init_mutex(Thread *p);
-extern void THREAD_init_barrier(Thread *p);
+extern void THREAD_init_barrier(Thread *p, int nb_of_barriers);
 extern void THREAD_init_semaphore(Thread *p);
 extern void THREAD_mutex(Thread *p);
 extern void THREAD_barrier(Thread *p);
